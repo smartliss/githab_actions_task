@@ -26,7 +26,7 @@ jobs:
       - name: Check if reponse.json was created correctly 
         run: |
           ls
-          cat reponse.json
+          cat response.json
 
   build-pyton:
     runs-on: ubuntu-latest
