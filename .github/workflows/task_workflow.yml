@@ -1,0 +1,43 @@
+name: Small Workflow for testing
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  test-python:
+    runs-on: ubuntu-latest
+        
+    steps:
+      - name: Checkout the repo
+        uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10" 
+      - name: Install Dependencies
+        run: pip install -r requirements.txt
+        shell: bash
+      - name: Run main.py
+        run: python3 main.py
+        shell: bash
+      - name: Check if reponse.json was created correctly 
+        run: |
+          ls
+          cat reponse.json
+
+  build-pyton:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the repo
+        uses: actions/checkout@v3
+      - name: Build and Push Docker Image
+        uses: mr-smithers-excellent/docker-build-push@v6.2
+        with:
+          image: kulichik39/python-app
+          tags: v1, latest
+          registry: docker.io
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
